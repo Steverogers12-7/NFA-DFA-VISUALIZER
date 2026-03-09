@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NFA → DFA Visualizer</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>NFA → DFA (Subset Construction)</h1>
+
+<div class="inputBox">
+
+<label>States</label>
+<input id="states" value="q0,q1,q2">
+
+<label>Alphabet</label>
+<input id="alphabet" value="0,1">
+
+<label>Start State</label>
+<input id="start" value="q0">
+
+<label>Final States</label>
+<input id="final" value="q2">
+
+<h3>Transitions</h3>
+
+<textarea id="transitions">
+
+q0,0=q0,q1
+q0,1=q0
+q1,0=q2
+q2,1=q2
+
+</textarea>
+
+<button onclick="convert()">Convert</button>
+
+</div>
+
+<h2>Subset Construction Steps</h2>
+<pre id="steps"></pre>
+
+<h2>DFA Table</h2>
+<pre id="dfaTable"></pre>
+
+<h2>NFA Graph</h2>
+<div id="nfaGraph"></div>
+
+<h2>DFA Graph</h2>
+<div id="dfaGraph"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
