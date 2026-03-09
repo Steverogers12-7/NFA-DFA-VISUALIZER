@@ -129,6 +129,9 @@ style:{
 selector:'edge',
 style:{
 'label':'data(label)',
+'target-arrow-shape':'triangle',
+'target-arrow-color':'#555',
+'line-color':'#555',
 'curve-style':'bezier'
 }
 }
@@ -183,7 +186,11 @@ style:{
 {
 selector:'edge',
 style:{
-'label':'data(label)'
+'label':'data(label)',
+'target-arrow-shape':'triangle',
+'target-arrow-color':'#555',
+'line-color':'#555',
+'curve-style':'bezier'
 }
 }
 ],
