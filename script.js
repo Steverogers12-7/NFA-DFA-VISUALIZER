@@ -134,13 +134,11 @@ style:{
 'line-color':'#555',
 'curve-style':'bezier',
 
-'text-rotation': 'autorotate',
-'text-margin-y': '-25px',
-'text-margin-x': '10px',
-
+/* 🔥 ADD THIS */
+'text-margin-y': '-15px',
 'text-background-color': '#fff',
 'text-background-opacity': 1,
-'text-background-padding': '3px'
+'text-background-padding': '2px'
 }
 }
 ],
@@ -200,13 +198,11 @@ style:{
 'line-color':'#555',
 'curve-style':'bezier',
 
-'text-rotation': 'autorotate',
-'text-margin-y': '-25px',
-'text-margin-x': '10px',
-
+/* 🔥 ADD THIS */
+'text-margin-y': '-15px',
 'text-background-color': '#fff',
 'text-background-opacity': 1,
-'text-background-padding': '3px'
+'text-background-padding': '2px'
 }
 }
 ],
