@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -5,7 +7,7 @@ let states = [];
 let transitions = [];
 
 /* Add State */
-function addState() {
+window.addState = function () {
     const name = document.getElementById("stateName").value;
 
     if (!name) return;
@@ -17,10 +19,10 @@ function addState() {
     });
 
     draw();
-}
+};
 
 /* Add Transition */
-function addTransition() {
+window.addTransition = function () {
     const from = document.getElementById("fromState").value;
     const to = document.getElementById("toState").value;
     const symbol = document.getElementById("symbol").value;
@@ -30,13 +32,13 @@ function addTransition() {
     transitions.push({ from, to, symbol });
 
     draw();
-}
+};
 
 /* Draw Graph */
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw transitions first
+    // Draw transitions
     transitions.forEach(t => {
         const s1 = states.find(s => s.name === t.from);
         const s2 = states.find(s => s.name === t.to);
@@ -47,9 +49,7 @@ function draw() {
     });
 
     // Draw states
-    states.forEach(s => {
-        drawState(s);
-    });
+    states.forEach(s => drawState(s));
 }
 
 /* Draw State */
@@ -70,10 +70,9 @@ function drawState(state) {
     ctx.fillText(state.name, state.x, state.y + 5);
 }
 
-/* Draw Arrow with SIDE LABEL */
+/* Draw Arrow */
 function drawArrow(x1, y1, x2, y2, label) {
     let angle = Math.atan2(y2 - y1, x2 - x1);
-
     let offset = 25;
 
     let startX = x1 + offset * Math.cos(angle);
@@ -82,7 +81,7 @@ function drawArrow(x1, y1, x2, y2, label) {
     let endX = x2 - offset * Math.cos(angle);
     let endY = y2 - offset * Math.sin(angle);
 
-    // Draw line
+    // Line
     ctx.beginPath();
     ctx.moveTo(startX, startY);
     ctx.lineTo(endX, endY);
@@ -105,7 +104,7 @@ function drawArrow(x1, y1, x2, y2, label) {
     ctx.fillStyle = "#00ffcc";
     ctx.fill();
 
-    // 🔥 LABEL SIDE OFFSET (MAIN FIX)
+    // Label side me
     let midX = (startX + endX) / 2;
     let midY = (startY + endY) / 2;
 
@@ -116,7 +115,6 @@ function drawArrow(x1, y1, x2, y2, label) {
     dx /= length;
     dy /= length;
 
-    // perpendicular shift
     let offsetX = -dy * 15;
     let offsetY = dx * 15;
 
@@ -124,3 +122,5 @@ function drawArrow(x1, y1, x2, y2, label) {
     ctx.font = "14px Arial";
     ctx.fillText(label, midX + offsetX, midY + offsetY);
 }
+
+});
