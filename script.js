@@ -135,7 +135,7 @@ style:{
 'curve-style':'bezier',
 
 /* 🔥 ADD THIS */
-'text-margin-y': '-15px',
+'text-margin-y': '-18px',
 'text-background-color': '#fff',
 'text-background-opacity': 1,
 'text-background-padding': '2px'
@@ -199,7 +199,7 @@ style:{
 'curve-style':'bezier',
 
 /* 🔥 ADD THIS */
-'text-margin-y': '-15px',
+'text-margin-y': '-18px',
 'text-background-color': '#fff',
 'text-background-opacity': 1,
 'text-background-padding': '2px'
