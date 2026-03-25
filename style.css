@@ -1,36 +1,70 @@
-body{
-font-family:Arial;
-background:#f2f2f2;
-padding:40px;
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-input,textarea{
-width:100%;
-margin-bottom:10px;
-padding:8px;
+/* Body */
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
-textarea{
-height:120px;
+/* Heading */
+h1 {
+    margin: 20px 0;
+    color: #00ffcc;
 }
 
-button{
-padding:10px;
-background:#2196f3;
-color:white;
-border:none;
-border-radius:5px;
+/* Container */
+.container {
+    width: 80%;
+    margin: auto;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 15px rgba(0, 255, 204, 0.2);
 }
 
-#nfaGraph,#dfaGraph{
-width:600px;
-height:350px;
-background:white;
-margin-top:20px;
-border:1px solid gray;
+/* Inputs */
+input {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #222;
+    color: #fff;
 }
 
-pre{
-background:white;
-padding:20px;
+/* Buttons */
+button {
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 6px;
+    border: none;
+    background-color: #00ffcc;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #00ccaa;
+}
+
+/* Canvas */
+canvas {
+    margin-top: 20px;
+    background-color: #000;
+    border: 1px solid #444;
+    border-radius: 10px;
+}
+
+/* Labels / text */
+label {
+    font-size: 14px;
+    margin-right: 5px;
 }
