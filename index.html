@@ -1,65 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>NFA → DFA Visualizer</title>
+<title>NFA → DFA Visualizer</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <!-- Cytoscape CDN -->
-    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
 
-    <style>
-        /* Graph containers */
-        #nfaGraph, #dfaGraph {
-            width: 600px;
-            height: 400px;
-            margin: 20px auto;
-            background: #000;
-            border-radius: 10px;
-            border: 1px solid #444;
-        }
-
-        textarea {
-            width: 300px;
-            height: 120px;
-            background-color: #222;
-            color: white;
-            border: 1px solid #555;
-            border-radius: 5px;
-            padding: 5px;
-        }
-    </style>
 </head>
 
 <body>
 
 <h1>NFA → DFA (Subset Construction)</h1>
 
-<div class="container">
+<div class="inputBox">
 
-    <label>States</label>
-    <input id="states" value="q0,q1,q2">
+<label>States</label>
+<input id="states" value="q0,q1,q2">
 
-    <label>Alphabet</label>
-    <input id="alphabet" value="0,1">
+<label>Alphabet</label>
+<input id="alphabet" value="0,1">
 
-    <label>Start State</label>
-    <input id="start" value="q0">
+<label>Start State</label>
+<input id="start" value="q0">
 
-    <label>Final States</label>
-    <input id="final" value="q2">
+<label>Final States</label>
+<input id="final" value="q2">
 
-    <h3>Transitions</h3>
+<h3>Transitions</h3>
 
-    <textarea id="transitions">
+<textarea id="transitions">
 q0,0=q0,q1
 q0,1=q0
 q1,0=q2
 q2,1=q2
-    </textarea>
+</textarea>
 
-    <br>
-    <button onclick="convert()">Convert</button>
+<button onclick="convert()">Convert</button>
 
 </div>
 
@@ -75,7 +52,6 @@ q2,1=q2
 <h2>DFA Graph</h2>
 <div id="dfaGraph"></div>
 
-<!-- JS FILE -->
 <script src="script.js"></script>
 
 </body>
