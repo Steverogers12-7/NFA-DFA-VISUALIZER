@@ -132,7 +132,13 @@ style:{
 'target-arrow-shape':'triangle',
 'target-arrow-color':'#555',
 'line-color':'#555',
-'curve-style':'bezier'
+'curve-style':'bezier',
+
+/* 🔥 ADD THIS */
+'text-margin-y': '-12px',
+'text-background-color': '#fff',
+'text-background-opacity': 1,
+'text-background-padding': '2px'
 }
 }
 ],
@@ -190,7 +196,13 @@ style:{
 'target-arrow-shape':'triangle',
 'target-arrow-color':'#555',
 'line-color':'#555',
-'curve-style':'bezier'
+'curve-style':'bezier',
+
+/* 🔥 ADD THIS */
+'text-margin-y': '-12px',
+'text-background-color': '#fff',
+'text-background-opacity': 1,
+'text-background-padding': '2px'
 }
 }
 ],
