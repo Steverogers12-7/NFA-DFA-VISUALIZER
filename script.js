@@ -3,7 +3,7 @@ function convert() {
     const states = document.getElementById("states").value.split(",");
     const alphabet = document.getElementById("alphabet").value.split(",");
     const start = document.getElementById("start").value;
-    const final = document.getElementById("final").value.split("\n");
+    const final = document.getElementById("final").value.split(",");
 
     const transitionsText = document.getElementById("transitions").value.trim().split("\n");
 
@@ -36,7 +36,6 @@ function convert() {
         });
     });
 
-    // Cytoscape graph
     cytoscape({
         container: document.getElementById("nfaGraph"),
 
@@ -47,10 +46,7 @@ function convert() {
                 selector: "node",
                 style: {
                     "background-color": "#00ffcc",
-                    "label": "data(id)",
-                    "color": "#000",
-                    "text-valign": "center",
-                    "text-halign": "center"
+                    "label": "data(id)"
                 }
             },
             {
@@ -58,14 +54,7 @@ function convert() {
                 style: {
                     "curve-style": "bezier",
                     "target-arrow-shape": "triangle",
-                    "line-color": "#00ffcc",
-                    "target-arrow-color": "#00ffcc",
-                    "label": "data(label)",
-                    "font-size": "12px",
-                    "text-background-color": "#121212",
-                    "text-background-opacity": 1,
-                    "text-background-padding": "3px",
-                    "text-margin-y": "-10px"   // 🔥 SIDE OFFSET FIX
+                    "label": "data(label)"
                 }
             }
         ],
