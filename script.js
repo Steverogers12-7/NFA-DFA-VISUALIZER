@@ -1,67 +1,202 @@
-function convert() {
+function convert(){
 
-    const states = document.getElementById("states").value.split(",");
-    const alphabet = document.getElementById("alphabet").value.split(",");
-    const start = document.getElementById("start").value;
-    const final = document.getElementById("final").value.split(",");
+let states=document.getElementById("states").value.split(",");
+let alphabet=document.getElementById("alphabet").value.split(",");
+let start=document.getElementById("start").value;
 
-    const transitionsText = document.getElementById("transitions").value.trim().split("\n");
+let lines=document.getElementById("transitions").value.trim().split("\n");
 
-    let elements = [];
+let nfa={};
 
-    // Nodes
-    states.forEach(s => {
-        elements.push({
-            data: { id: s }
-        });
-    });
+states.forEach(s=>{
+nfa[s]={};
+alphabet.forEach(a=>nfa[s][a]=[]);
+})
 
-    // Edges
-    transitionsText.forEach(line => {
-        if (!line.trim()) return;
+lines.forEach(l=>{
 
-        let [left, right] = line.split("=");
-        let [from, symbol] = left.split(",");
-        let toStates = right.split(",");
+let [left,right]=l.split("=");
 
-        toStates.forEach(t => {
-            elements.push({
-                data: {
-                    id: from + t + symbol,
-                    source: from,
-                    target: t,
-                    label: symbol
-                }
-            });
-        });
-    });
+let [state,symbol]=left.split(",");
 
-    cytoscape({
-        container: document.getElementById("nfaGraph"),
+nfa[state][symbol]=right.split(",");
 
-        elements: elements,
+})
 
-        style: [
-            {
-                selector: "node",
-                style: {
-                    "background-color": "#00ffcc",
-                    "label": "data(id)"
-                }
-            },
-            {
-                selector: "edge",
-                style: {
-                    "curve-style": "bezier",
-                    "target-arrow-shape": "triangle",
-                    "label": "data(label)"
-                }
-            }
-        ],
+let queue=[[start]];
+let visited=[[start]];
 
-        layout: {
-            name: "circle"
-        }
-    });
+let dfa={};
+
+let steps="";
+
+while(queue.length){
+
+let current=queue.shift();
+
+let name=current.join("");
+
+steps+=`Processing {${name}}\n`;
+
+dfa[name]={};
+
+alphabet.forEach(symbol=>{
+
+let newSet=new Set();
+
+current.forEach(s=>{
+nfa[s][symbol].forEach(t=>newSet.add(t))
+})
+
+let newState=[...newSet].sort();
+
+if(newState.length===0) return;
+
+dfa[name][symbol]=newState.join("");
+
+steps+=` {${name}} --${symbol}--> {${newState}}\n`;
+
+let exists=visited.some(v=>v.join("")===newState.join(""));
+
+if(!exists){
+
+visited.push(newState);
+queue.push(newState);
+
+}
+
+})
+
+steps+="\n";
+
+}
+
+document.getElementById("steps").innerText=steps;
+
+document.getElementById("dfaTable").innerText=
+JSON.stringify(dfa,null,2);
+
+drawNFA(nfa,states,alphabet);
+
+drawDFA(dfa);
+
+}
+
+
+
+function drawNFA(nfa,states,alphabet){
+
+let elements=[];
+
+states.forEach(s=>{
+
+elements.push({data:{id:s}});
+
+alphabet.forEach(a=>{
+
+nfa[s][a].forEach(t=>{
+
+elements.push({
+data:{
+source:s,
+target:t,
+label:a
+}
+
+})
+
+})
+
+})
+
+})
+
+let cy=cytoscape({
+
+container:document.getElementById("nfaGraph"),
+
+elements:elements,
+
+style:[
+{
+selector:'node',
+style:{
+'label':'data(id)',
+'background-color':'#0074D9'
+}
+},
+{
+selector:'edge',
+style:{
+'label':'data(label)',
+'target-arrow-shape':'triangle',
+'target-arrow-color':'#555',
+'line-color':'#555',
+'curve-style':'bezier'
+}
+}
+],
+
+layout:{name:'circle'}
+
+})
+
+}
+
+
+
+function drawDFA(dfa){
+
+let elements=[];
+
+Object.keys(dfa).forEach(s=>{
+
+elements.push({data:{id:s}});
+
+Object.keys(dfa[s]).forEach(symbol=>{
+
+elements.push({
+
+data:{
+source:s,
+target:dfa[s][symbol],
+label:symbol
+}
+
+})
+
+})
+
+})
+
+cytoscape({
+
+container:document.getElementById("dfaGraph"),
+
+elements:elements,
+
+style:[
+{
+selector:'node',
+style:{
+'label':'data(id)',
+'background-color':'green'
+}
+},
+{
+selector:'edge',
+style:{
+'label':'data(label)',
+'target-arrow-shape':'triangle',
+'target-arrow-color':'#555',
+'line-color':'#555',
+'curve-style':'bezier'
+}
+}
+],
+
+layout:{name:'circle'}
+
+})
 
 }
