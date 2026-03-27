@@ -204,12 +204,16 @@ h2 {
     background-color: #fafafa;
 }
 
-#nfaGraph,#dfaGraph{
-width:900px;
-height:500px;
-background:white;
-margin-top:20px;
-border:1px solid gray;
+#nfaGraph, #dfaGraph {
+    width: 100%;
+    max-width: 800px; /* Aapke input boxes jitna */
+    height: 450px;
+    border: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    border-radius: 12px;
+    margin-top: 20px;
+    overflow: hidden; /* Yeh important hai */
+    position: relative;
 }
 
 pre{
