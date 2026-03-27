@@ -1,214 +1,143 @@
-function convert(){
+function convert() {
+    try {
+        // Inputs ko read karna
+        let statesInput = document.getElementById("states").value.trim();
+        let alphabetInput = document.getElementById("alphabet").value.trim();
+        let startInput = document.getElementById("start").value.trim();
+        let transInput = document.getElementById("transitions").value.trim();
 
-let states=document.getElementById("states").value.split(",");
-let alphabet=document.getElementById("alphabet").value.split(",");
-let start=document.getElementById("start").value;
+        if (!statesInput || !alphabetInput || !startInput || !transInput) {
+            alert("Bhai, saare fields bharo pehle!");
+            return;
+        }
 
-let lines=document.getElementById("transitions").value.trim().split("\n");
+        let states = statesInput.split(",").map(s => s.trim());
+        let alphabet = alphabetInput.split(",").map(a => a.trim());
+        let start = startInput;
+        let lines = transInput.split("\n");
 
-let nfa={};
+        let nfa = {};
+        states.forEach(s => {
+            nfa[s] = {};
+            alphabet.forEach(a => nfa[s][a] = []);
+        });
 
-states.forEach(s=>{
-nfa[s]={};
-alphabet.forEach(a=>nfa[s][a]=[]);
-})
+        lines.forEach(l => {
+            if (l.includes("=") && l.includes(",")) {
+                let [left, right] = l.split("=");
+                let [state, symbol] = left.split(",").map(x => x.trim());
+                if (nfa[state] && nfa[state][symbol]) {
+                    nfa[state][symbol] = right.split(",").map(x => x.trim());
+                }
+            }
+        });
 
-lines.forEach(l=>{
+        let queue = [[start]];
+        let visited = [[start]];
+        let dfa = {};
+        let steps = "";
 
-let [left,right]=l.split("=");
+        while (queue.length > 0) {
+            let current = queue.shift();
+            let name = current.join("");
+            steps += `Processing {${current.join(", ")}}\n`;
+            dfa[name] = {};
 
-let [state,symbol]=left.split(",");
+            alphabet.forEach(symbol => {
+                let newSet = new Set();
+                current.forEach(s => {
+                    if (nfa[s] && nfa[s][symbol]) {
+                        nfa[s][symbol].forEach(t => newSet.add(t));
+                    }
+                });
 
-nfa[state][symbol]=right.split(",");
+                let newState = [...newSet].sort();
+                
+                // FIX: 'return' ki jagah sirf skip karna hai agar empty ho
+                if (newState.length === 0) {
+                    dfa[name][symbol] = "∅"; 
+                    steps += `  → Input '${symbol}': No transitions (Dead state)\n`;
+                } else {
+                    let nextStateName = newState.join("");
+                    dfa[name][symbol] = nextStateName;
+                    steps += `  → Input '${symbol}': {${current.join(", ")}} moves to {${newState.join(", ")}}\n`;
 
-})
+                    let exists = visited.some(v => v.join("") === nextStateName);
+                    if (!exists) {
+                        visited.push(newState);
+                        queue.push(newState);
+                    }
+                }
+            });
+            steps += "\n-----------------------------------\n";
+        }
 
-let queue=[[start]];
-let visited=[[start]];
+        // Display Results
+        document.getElementById("steps").innerText = steps;
 
-let dfa={};
+        // Render Table
+        let tableHTML = `<table class="modern-table">
+            <thead>
+                <tr>
+                    <th>DFA State</th>`;
+        alphabet.forEach(a => { tableHTML += `<th>Input: ${a}</th>`; });
+        tableHTML += `</tr></thead><tbody>`;
 
-let steps="";
+        for (let state in dfa) {
+            tableHTML += `<tr><td class="state-name">{${state}}</td>`;
+            alphabet.forEach(a => {
+                let next = dfa[state][a];
+                tableHTML += `<td>${next === "∅" ? "∅" : "{" + next + "}"}</td>`;
+            });
+            tableHTML += `</tr>`;
+        }
+        tableHTML += `</tbody></table>`;
+        document.getElementById("dfaTable").innerHTML = tableHTML;
 
-while(queue.length){
+        // Draw Graphs
+        drawNFA(nfa, states, alphabet);
+        drawDFA(dfa);
 
-let current=queue.shift();
-
-let name=current.join("");
-
-steps+=`Processing {${name}}\n`;
-
-dfa[name]={};
-
-alphabet.forEach(symbol=>{
-
-let newSet=new Set();
-
-current.forEach(s=>{
-nfa[s][symbol].forEach(t=>newSet.add(t))
-})
-
-let newState=[...newSet].sort();
-
-if(newState.length===0) return;
-
-dfa[name][symbol]=newState.join("");
-
-steps+=` {${name}} --${symbol}--> {${newState}}\n`;
-
-let exists=visited.some(v=>v.join("")===newState.join(""));
-
-if(!exists){
-
-visited.push(newState);
-queue.push(newState);
-
+    } catch (error) {
+        console.error(error);
+        alert("Kuch galat hai! Transitions check karo (Format: q0,0=q1)");
+    }
 }
 
-})
-
-steps+="\n";
-
+function drawNFA(nfa, states, alphabet) {
+    let elements = [];
+    states.forEach(s => elements.push({ data: { id: s } }));
+    states.forEach(s => {
+        alphabet.forEach(a => {
+            nfa[s][a].forEach(t => {
+                elements.push({ data: { source: s, target: t, label: a } });
+            });
+        });
+    });
+    renderGraph('nfaGraph', elements, '#2196f3');
 }
 
-document.getElementById("steps").innerText=steps;
-
-document.getElementById("dfaTable").innerText=
-JSON.stringify(dfa,null,2);
-
-drawNFA(nfa,states,alphabet);
-
-drawDFA(dfa);
-
+function drawDFA(dfa) {
+    let elements = [];
+    Object.keys(dfa).forEach(s => elements.push({ data: { id: s } }));
+    Object.keys(dfa).forEach(s => {
+        Object.keys(dfa[s]).forEach(symbol => {
+            if (dfa[s][symbol] !== "∅") {
+                elements.push({ data: { source: s, target: dfa[s][symbol], label: symbol } });
+            }
+        });
+    });
+    renderGraph('dfaGraph', elements, '#4caf50');
 }
 
-
-
-function drawNFA(nfa,states,alphabet){
-
-let elements=[];
-
-states.forEach(s=>{
-
-elements.push({data:{id:s}});
-
-alphabet.forEach(a=>{
-
-nfa[s][a].forEach(t=>{
-
-elements.push({
-data:{
-source:s,
-target:t,
-label:a
-}
-
-})
-
-})
-
-})
-
-})
-
-let cy=cytoscape({
-
-container:document.getElementById("nfaGraph"),
-
-elements:elements,
-
-style:[
-{
-selector:'node',
-style:{
-'label':'data(id)',
-'background-color':'#0074D9'
-}
-},
-{
-selector:'edge',
-style:{
-'label':'data(label)',
-'target-arrow-shape':'triangle',
-'target-arrow-color':'#555',
-'line-color':'#555',
-'curve-style':'bezier',
-
-/* 🔥 ADD THIS */
-'text-margin-y': '-18px',
-'text-background-color': '#fff',
-'text-background-opacity': 1,
-'text-background-padding': '2px'
-}
-}
-],
-
-layout:{name:'circle'}
-
-})
-
-}
-
-
-
-function drawDFA(dfa){
-
-let elements=[];
-
-Object.keys(dfa).forEach(s=>{
-
-elements.push({data:{id:s}});
-
-Object.keys(dfa[s]).forEach(symbol=>{
-
-elements.push({
-
-data:{
-source:s,
-target:dfa[s][symbol],
-label:symbol
-}
-
-})
-
-})
-
-})
-
-cytoscape({
-
-container:document.getElementById("dfaGraph"),
-
-elements:elements,
-
-style:[
-{
-selector:'node',
-style:{
-'label':'data(id)',
-'background-color':'green'
-}
-},
-{
-selector:'edge',
-style:{
-'label':'data(label)',
-'target-arrow-shape':'triangle',
-'target-arrow-color':'#555',
-'line-color':'#555',
-'curve-style':'bezier',
-
-/* 🔥 ADD THIS */
-'text-margin-y': '-18px',
-'text-background-color': '#fff',
-'text-background-opacity': 1,
-'text-background-padding': '2px'
-}
-}
-],
-
-layout:{name:'circle'}
-
-})
-
+function renderGraph(id, elements, color) {
+    cytoscape({
+        container: document.getElementById(id),
+        elements: elements,
+        style: [
+            { selector: 'node', style: { 'label': 'data(id)', 'background-color': color, 'color': '#fff', 'text-valign': 'center', 'text-halign': 'center', 'width': '55px', 'height': '55px', 'font-size': '14px' } },
+            { selector: 'edge', style: { 'label': 'data(label)', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'line-color': '#999', 'target-arrow-color': '#999', 'font-size': '12px', 'text-margin-y': '-10px' } }
+        ],
+        layout: { name: 'circle', padding: 30 }
+    });
 }
