@@ -3,9 +3,12 @@
 <head>
 <title>NFA → DFA Visualizer</title>
 
+
+
 <link rel="stylesheet" href="style.css">
 
 <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 </head>
 
@@ -13,32 +16,103 @@
 
 <h1>NFA → DFA (Subset Construction)</h1>
 
+<p class="description">
+    This tool converts a Non-Deterministic Finite Automaton (NFA) into an equivalent 
+    Deterministic Finite Automaton (DFA) using the subset construction algorithm.
+    It also shows step-by-step conversion, transition table, and graphical 
+    representation of both automata.
+</p>
+
 <div class="inputBox">
 
-<label>States</label>
-<input id="states" value="q0,q1,q2">
 
-<label>Alphabet</label>
-<input id="alphabet" value="0,1">
 
-<label>Start State</label>
-<input id="start" value="q0">
+<div class="form-group">
+    <label class="heading dark">
+        <i class="fas fa-layer-group" style="color: #2196f3; margin-right: 10px;"></i> States (Q)
+    </label>
+    
+    <input type="text" id="states" value="q0,q1,q2" placeholder="e.g. q0, q1, q2">
 
-<label>Final States</label>
-<input id="final" value="q2">
+    <p class="hint">
+        <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+        All states present in the NFA (comma separated) <br>
+        <strong>Example:</strong> q0, q1, q2
+    </p>
+</div>
 
-<h3>Transitions</h3>
 
-<textarea id="transitions">
 
+
+<div class="form-group">
+    <label class="heading dark">
+        <i class="fas fa-font" style="color: #2196f3; margin-right: 10px;"></i> Alphabet (Σ)
+    </label>
+    
+    <input type="text" id="alphabet" value="0,1" placeholder="e.g. 0, 1 or a, b">
+
+    <p class="hint">
+        <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+        Set of input symbols used in the automaton (comma separated) <br>
+        <strong>Example:</strong> 0, 1
+    </p>
+</div>
+
+
+<div class="form-group">
+    <label class="heading dark">
+        <i class="fas fa-play-circle" style="color: #2196f3; margin-right: 10px;"></i> Start State (q₀)
+    </label>
+    
+    <input type="text" id="start" value="q0" placeholder="e.g. q0">
+
+    <p class="hint">
+        <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+        Initial state where the automaton starts computation <br>
+        <strong>Example:</strong> q0
+    </p>
+</div>
+
+
+
+<div class="form-group">
+    <label class="heading dark">
+        <i class="fas fa-check-double" style="color: #4caf50; margin-right: 10px;"></i> Final States (F)
+    </label>
+    
+    <input type="text" id="final" value="q2" placeholder="e.g. q1, q2">
+
+    <p class="hint">
+        <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+        Accepting states of the NFA (comma separated) <br>
+        <strong>Example:</strong> q1, q2
+    </p>
+</div>
+
+
+<div class="form-group">
+    <label class="heading dark">
+        <i class="fas fa-route" style="color: #2196f3; margin-right: 10px;"></i> Transitions (δ)
+    </label>
+
+    <textarea id="transitions" rows="6" placeholder="Present State,input=Next States">
 q0,0=q0,q1
 q0,1=q0
 q1,0=q2
-q2,1=q2
+q2,1=q2</textarea>
 
-</textarea>
+    <p class="hint">
+        <i class="fas fa-terminal" style="margin-right: 5px;"></i>
+        <strong>Format:</strong> Present State,input=Next States <br>
+        <strong>Example:</strong> q1,1=q1,q2
+    </p>
+</div>
 
-<button onclick="convert()">Convert</button>
+<div style="text-align: center; margin-top: 30px;">
+    <button onclick="convert()" class="convert-btn">
+        <i class="fas fa-sync-alt"></i> Convert to DFA
+    </button>
+</div>
 
 </div>
 
@@ -46,7 +120,7 @@ q2,1=q2
 <pre id="steps"></pre>
 
 <h2>DFA Table</h2>
-<pre id="dfaTable"></pre>
+<div id="dfaTable"></div>
 
 <h2>NFA Graph</h2>
 <div id="nfaGraph"></div>
