@@ -104,14 +104,18 @@ function convert() {
     }
 }
 
+
+
 function drawNFA(nfa, states, alphabet) {
     let elements = [];
     states.forEach(s => elements.push({ data: { id: s } }));
     states.forEach(s => {
         alphabet.forEach(a => {
-            nfa[s][a].forEach(t => {
-                elements.push({ data: { source: s, target: t, label: a } });
-            });
+            if (nfa[s] && nfa[s][a]) {
+                nfa[s][a].forEach(t => {
+                    elements.push({ data: { source: s, target: t, label: a } });
+                });
+            }
         });
     });
     renderGraph('nfaGraph', elements, '#2196f3');
@@ -134,10 +138,46 @@ function renderGraph(id, elements, color) {
     cytoscape({
         container: document.getElementById(id),
         elements: elements,
+        
+        // --- Fix for Zoom/Gayab hona ---
+        zoomingEnabled: false,      
+        panningEnabled: false,      
+        userZoomingEnabled: false,  
+        autoungrabify: true,        
+
         style: [
-            { selector: 'node', style: { 'label': 'data(id)', 'background-color': color, 'color': '#fff', 'text-valign': 'center', 'text-halign': 'center', 'width': '55px', 'height': '55px', 'font-size': '14px' } },
-            { selector: 'edge', style: { 'label': 'data(label)', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'line-color': '#999', 'target-arrow-color': '#999', 'font-size': '12px', 'text-margin-y': '-10px' } }
+            { 
+                selector: 'node', 
+                style: { 
+                    'label': 'data(id)', 
+                    'background-color': color, 
+                    'color': '#fff', 
+                    'text-valign': 'center', 
+                    'text-halign': 'center', 
+                    'width': '65px', 
+                    'height': '65px', 
+                    'font-size': '18px', /* Bada font */
+                    'font-weight': 'bold'
+                } 
+            },
+            { 
+                selector: 'edge', 
+                style: { 
+                    'label': 'data(label)', 
+                    'target-arrow-shape': 'triangle', 
+                    'curve-style': 'bezier', 
+                    'line-color': '#444', 
+                    'target-arrow-color': '#444', 
+                    'font-size': '16px', 
+                    'text-margin-y': '-12px',
+                    'width': 2.5, /* Line thodi moti */
+                    'arrow-scale': 1.5
+                } 
+            }
         ],
-        layout: { name: 'circle', padding: 30 }
+        layout: { 
+            name: 'circle', 
+            padding: 60 
+        }
     });
 }
