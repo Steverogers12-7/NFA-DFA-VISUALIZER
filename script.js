@@ -7,7 +7,7 @@ function convert() {
         let transInput = document.getElementById("transitions").value.trim();
 
         if (!statesInput || !alphabetInput || !startInput || !transInput) {
-            alert("Bhai, saare fields bharo pehle!");
+            alert("Fill all fields properly!");
             return;
         }
 
