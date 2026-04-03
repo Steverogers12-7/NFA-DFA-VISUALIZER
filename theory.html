@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Theory - NFA & DFA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Theory of NFA & DFA</h1>
+<p style="text-align:center; font-size:26px;">
+This page explains the theory of Regular Languages, DFA, NFA and Subset Construction Method used in NFA to DFA conversion.
+</p>
+<img src="images/Screenshot 2026-04-03 123517.png">
+
+
+<div class="description">
+
+
+<h2>Regular Language</h2>
+<p>
+A regular language is a language that can be expressed with a regular expression or a deterministic or non-deterministic finite automata or state machine.
+A language is a set of strings which are made up of characters from a specified alphabet, or set of symbols. Regular languages are a subset of the set of all strings.
+Regular languages are used in parsing and designing programming languages and are one of the first concepts taught in computability courses. 
+</p>
+
+<h2>NFA(Non-deterministic finite automata)</h2>
+
+<p>
+NFA (Non-Deterministic Finite Automaton) is a type of finite automaton in which, 
+for a given state and input symbol, the machine can move to zero, one, or multiple next states.
+</p>
+<img src="images/Screenshot 2026-04-03 103026.png" class="theory-img">
+<img src="images/Screenshot 2026-04-03 103119.png" class="theory-img">
+
+<h2>DFA(Deterministic finite automata)</h2>
+
+<p>
+A Deterministic Finite Automaton is a machine that reads input symbols one by one and moves from one state to another,
+and if after reading the whole string it reaches an accepting state, the string is accepted, otherwise rejected.
+</p>
+<img src="images/Screenshot 2026-04-03 123440.png" class="theory-img">
+<img src="images/Screenshot 2026-04-03 123509.png" class="theory-img">
+
+
+<img src="images/Difference-between-DFA-and-NFA.webp" class="theory-img">
+
+<h2>Subset Construction Method</h2>
+<p>
+Subset construction method is used to convert an NFA into a DFA. In this method,
+a group of NFA states is treated as a single state in DFA. Since NFA can move to
+multiple states on one input, we combine those states and make one DFA state.
+By creating all possible combinations of NFA states, we construct the DFA.
+</p>
+<img src="images/Screenshot 2026-04-03 124532.png" class="theory-img">
+
+
+</div>
+
+<div style="text-align:center; margin-top:40px;">
+    <button onclick="goBack()" class="convert-btn">⬅ Back to tool</button>
+</div>
+
+<script>
+function goBack(){
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
