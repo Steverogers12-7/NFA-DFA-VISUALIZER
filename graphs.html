@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Graphs</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script>
+<script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>
+</head>
+
+<body>
+
+<h1>Graph Visualization</h1>
+
+<h2>NFA Graph</h2>
+<div id="nfaGraph"></div>
+
+<h2>DFA Graph</h2>
+<div id="dfaGraph"></div>
+
+<button onclick="goBack()" class="convert-btn">⬅ Back to tool</button>
+
+<script>
+window.onload = function() {
+    let viz = new Viz();
+
+    let nfaDOT = localStorage.getItem("nfaGraphDOT");
+    let dfaDOT = localStorage.getItem("dfaGraphDOT");
+
+    if(!nfaDOT || !dfaDOT){
+        alert("Pehle Convert karo phir yaha aao!");
+        return;
+    }
+
+    viz.renderSVGElement(nfaDOT).then(svg => {
+        document.getElementById("nfaGraph").appendChild(svg);
+    });
+
+    viz.renderSVGElement(dfaDOT).then(svg => {
+        document.getElementById("dfaGraph").appendChild(svg);
+    });
+};
+
+function goBack(){
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
