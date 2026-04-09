@@ -1,162 +1,235 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NFA → DFA Visualizer</title>
-
-
-
 <link rel="stylesheet" href="style.css">
-
 <script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script>
 <script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 </head>
-
 <body>
 
-<div class="top-buttons">
-    <button onclick="goToTheory()">Theory</button>
-    <button onclick="goToGraphs()">Graphs</button>
+<!-- ── FLOATING NAV ── -->
+<nav class="site-nav">
+  <span class="nav-logo">⚙ NFA→DFA</span>
+  <button onclick="document.getElementById('tool').scrollIntoView({behavior:'smooth'})">Tool</button>
+  <a href="theory.html">Theory</a>
+  <a href="graphs.html" class="nav-cta">View Graphs</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-badge">Automata Theory · Subset Construction</div>
+
+  <h1>NFA → DFA Converter<br>&amp; Visualizer</h1>
+
+  <p class="hero-sub">
+    Transform any Non-Deterministic Finite Automaton into an equivalent DFA instantly.
+    Step-by-step walkthrough, transition tables, and interactive graph visualization.
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.getElementById('tool').scrollIntoView({behavior:'smooth'})">
+      <i class="fas fa-play"></i> Start Converting
+    </button>
+    <a href="theory.html" class="btn-secondary">
+      <i class="fas fa-book"></i> Read Theory
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item"><span class="stat-num">NFA</span><span class="stat-lbl">Input Automaton</span></div>
+    <div class="stat-item"><span class="stat-num">→</span><span class="stat-lbl"></span></div>
+    <div class="stat-item"><span class="stat-num">DFA</span><span class="stat-lbl">Deterministic Output</span></div>
+    <div class="stat-item"><span class="stat-num">2<sup>n</sup></span><span class="stat-lbl">Max DFA States</span></div>
+    <div class="stat-item"><span class="stat-num">∅</span><span class="stat-lbl">Dead State Handled</span></div>
+  </div>
+
+  <div class="scroll-indicator">scroll</div>
+</section>
+
+<!-- ── FEATURE CARDS ── -->
+<div class="features">
+  <div class="feature-card">
+    <div class="feature-icon">🔄</div>
+    <h3>Subset Construction</h3>
+    <p>Full step-by-step trace of the classic algorithm, showing every state set as it's built.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📊</div>
+    <h3>Visual Graph Output</h3>
+    <p>Render both NFA and DFA as crisp directed graphs using Graphviz via Viz.js.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📋</div>
+    <h3>Transition Table</h3>
+    <p>DFA transition table with final states highlighted, dead states clearly marked.</p>
+  </div>
 </div>
-<img src="sddefault.jpg" class="logo">
 
-<h1>NFA → DFA Converter & Visualizer</h1>
-
-<p class="description">
-    This tool converts a Non-Deterministic Finite Automaton (NFA) into an equivalent 
-    Deterministic Finite Automaton (DFA) using the subset construction algorithm.
-    It also shows step-by-step conversion, transition table, and graphical 
-    representation of both automata.
-</p>
-
-<div class="theory-section">
-    <h2>• For Theory</h2>
-    <a href="theory.html" class="theory-btn">Open Theory</a>
-</div>
-<div class="instruction-box">
-
-    <h2>📌 Instructions</h2>
-
-    <p>
-        Below is a sample NFA graph along with its corresponding inputs.
-        Use this format to enter your own NFA correctly.
+<!-- ── INSTRUCTIONS ── -->
+<div class="section">
+  <div class="instruction-box" id="instructions">
+    <h2>How to Use</h2>
+    <p style="color:#94a3b8; font-size:14px; margin-bottom:20px;">
+      Enter your NFA below using the format shown. A sample NFA is pre-loaded so you can run it immediately.
     </p>
-
     <div class="example-container">
-
-        <div id="exampleGraph"></div>
-
-        <script>
-        window.onload = function(){
-        loadExampleGraph();
-        }
-        </script>
-
-        <div class="example-input">
-            <h3>Corresponding Input</h3>
-
-            <p><strong>Start State:</strong> q0</p>
-            <p><strong>Final States:</strong> q2</p>
-            <p><strong>Transitions:</strong>
-
-            <pre>
-q0,0=q0,q1
+      <div id="exampleGraph"></div>
+      <div class="example-input">
+        <h3>Sample Input</h3>
+        <p><strong>Start State:</strong> q0</p>
+        <p><strong>Final States:</strong> q2</p>
+        <p style="margin-top:10px;"><strong>Transitions:</strong></p>
+        <pre style="margin-top:8px;">q0,0=q0,q1
 q0,1=q0
 q1,0=q2
-q2,1=q2
-            </pre>
+q2,1=q2</pre>
+      </div>
+    </div>
+  </div>
+</div>
 
-        </div>
+<!-- ── TOOL ── -->
+<div class="section" id="tool">
+  <span class="section-label">Automaton Input</span>
+  <div class="section-title" style="margin-bottom:24px;">Define Your NFA</div>
 
+  <div class="inputBox">
+
+    <div class="form-group">
+      <label class="heading dark">
+        <i class="fas fa-play-circle"></i> Start State (q₀)
+      </label>
+      <input type="text" id="start" value="q0" placeholder="e.g. q0">
+      <p class="hint">
+        <i class="fas fa-info-circle"></i>
+        <span>Initial state where computation begins — <strong>e.g. q0</strong></span>
+      </p>
     </div>
 
-</div>
+    <div class="form-group">
+      <label class="heading dark">
+        <i class="fas fa-check-double"></i> Final / Accepting States (F)
+      </label>
+      <input type="text" id="final" value="q2" placeholder="e.g. q1, q2">
+      <p class="hint">
+        <i class="fas fa-info-circle"></i>
+        <span>Comma-separated list of accepting states — <strong>e.g. q1, q2</strong></span>
+      </p>
+    </div>
 
-
-<div class="inputBox">
-
-
-<div class="form-group">
-    <label class="heading dark">
-        <i class="fas fa-play-circle" style="color: #2196f3; margin-right: 10px;"></i> Start State (q₀)
-    </label>
-    
-    <input type="text" id="start" value="q0" placeholder="e.g. q0">
-
-    <p class="hint">
-        <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
-        Initial state where the automaton starts computation <br>
-        <strong>Example:</strong> q0
-    </p>
-</div>
-
-
-
-<div class="form-group">
-    <label class="heading dark">
-        <i class="fas fa-check-double" style="color: #4caf50; margin-right: 10px;"></i> Final States (F)
-    </label>
-    
-    <input type="text" id="final" value="q2" placeholder="e.g. q1, q2">
-
-    <p class="hint">
-        <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
-        Accepting states of the NFA (comma separated) <br>
-        <strong>Example:</strong> q1, q2
-    </p>
-</div>
-
-
-<div class="form-group">
-    <label class="heading dark">
-        <i class="fas fa-route" style="color: #2196f3; margin-right: 10px;"></i> Transitions (δ)
-    </label>
-
-    <textarea id="transitions" rows="6" placeholder="Present State,input=Next States">
-q0,0=q0,q1
+    <div class="form-group">
+      <label class="heading dark">
+        <i class="fas fa-route"></i> Transition Function (δ)
+      </label>
+      <textarea id="transitions" placeholder="state,symbol=nextState1,nextState2">q0,0=q0,q1
 q0,1=q0
 q1,0=q2
 q2,1=q2</textarea>
+      <p class="hint">
+        <i class="fas fa-terminal"></i>
+        <span>One transition per line — <strong>Format: state,symbol=next1,next2</strong></span>
+      </p>
+    </div>
 
-    <p class="hint">
-        <i class="fas fa-terminal" style="margin-right: 5px;"></i>
-        <strong>Format:</strong> Present State,input=Next States <br>
-        <strong>Example:</strong> q1,1=q1,q2
-    </p>
-</div>
-
-<div style="text-align: center; margin-top: 30px;">
-    <button onclick="convert()" class="convert-btn">
+    <div style="text-align:center; margin-top:32px;">
+      <button id="convertBtn" class="convert-btn" onclick="runConvert()">
         <i class="fas fa-sync-alt"></i> Convert to DFA
-    </button>
+      </button>
+    </div>
+  </div>
 </div>
 
+<!-- ── RESULTS ── -->
+<div class="section" id="results" style="display:none;">
+  <span class="section-label">Output</span>
+
+  <h2>Subset Construction Steps</h2>
+  <div id="steps" class="steps-output"></div>
+
+  <h2>DFA Transition Table</h2>
+  <div id="dfaTable"></div>
+
+  <div style="margin-top:40px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+    <h2 style="margin:0;">Graph Visualization</h2>
+    <a href="graphs.html" class="graph-btn">
+      <i class="fas fa-project-diagram" style="margin-right:6px;"></i> View Full Graphs
+    </a>
+  </div>
+  <p style="color:#64748b; font-size:13px; margin-top:8px;">
+    Graphs are saved automatically — click the button to view both NFA &amp; DFA rendered side by side.
+  </p>
 </div>
 
-<h2>Subset Construction Steps</h2>
-<pre id="steps"></pre>
-
-<h2>DFA Table</h2>
-<div id="dfaTable"></div>
-
-<div class="graph-section">
-    <h2>• Graph Visualization</h2>
-    <a href="graphs.html" class="graph-btn">View Graphs</a>
+<!-- ── LINKS ── -->
+<div class="section">
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    <a href="theory.html" class="theory-btn"><i class="fas fa-book" style="margin-right:6px;"></i> Open Theory</a>
+    <a href="graphs.html" class="graph-btn"><i class="fas fa-project-diagram" style="margin-right:6px;"></i> View Graphs</a>
+  </div>
 </div>
 
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg">Conversion complete!</span>
+</div>
+
+<footer class="site-footer">
+  Developed by Ashutosh Kumar (2024UCM2304) · NSUT
+</footer>
 
 <script>
-function goToTheory(){
-    window.location.href = "theory.html";
+function goToTheory(){ window.location.href = "theory.html"; }
+function goToGraphs(){ window.location.href = "graphs.html"; }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
 }
 
-function goToGraphs(){
-    window.location.href = "graphs.html";
+function runConvert() {
+  const btn = document.getElementById('convertBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  setTimeout(() => {
+    convert();
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    const results = document.getElementById('results');
+    const steps = document.getElementById('steps');
+    if (steps.textContent.trim()) {
+      results.style.display = 'block';
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showToast('✓ Conversion complete — graphs saved!');
+    }
+  }, 450);
 }
+
+// scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.animation = 'fadeUp 0.6s ease both';
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.feature-card, .card').forEach(el => observer.observe(el));
+
+window.onload = function(){ loadExampleGraph(); };
 </script>
-
 <script src="script.js"></script>
-
 </body>
 </html>
+
