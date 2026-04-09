@@ -1,49 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Graphs</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graphs – NFA & DFA Visualizer</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script>
 <script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
 <body>
 
-<h1>Graph Visualization</h1>
+<nav class="site-nav">
+  <span class="nav-logo">⚙ NFA→DFA</span>
+  <a href="index.html">Tool</a>
+  <a href="theory.html">Theory</a>
+  <a href="index.html" class="nav-cta">← Back</a>
+</nav>
 
-<h2>NFA Graph</h2>
-<div id="nfaGraph"></div>
+<section class="hero" style="min-height:34vh; padding-top:100px; padding-bottom:20px;">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="orb orb-1" style="opacity:0.5;"></div>
+  <div class="hero-badge">Visual Output</div>
+  <h1 style="font-size:clamp(1.8rem,4vw,3rem);">Graph Visualization</h1>
+  <p class="hero-sub" style="margin-bottom:0;">
+    Rendered NFA and equivalent DFA from your last conversion.
+  </p>
+</section>
 
-<h2>DFA Graph</h2>
-<div id="dfaGraph"></div>
+<div style="max-width:900px; margin:0 auto; padding:0 32px 100px;">
 
-<button onclick="goBack()" class="convert-btn">⬅ Back to tool</button>
+  <div class="graph-card">
+    <h2>NFA — Non-Deterministic</h2>
+    <div id="nfaGraph">
+      <div class="graph-loading">
+        <i class="fas fa-circle-notch fa-spin" style="color:#6366f1; font-size:28px; margin-bottom:12px; display:block;"></i>
+        <span>Rendering graph…</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <h2>DFA — Deterministic Equivalent</h2>
+    <div id="dfaGraph">
+      <div class="graph-loading">
+        <i class="fas fa-circle-notch fa-spin" style="color:#6366f1; font-size:28px; margin-bottom:12px; display:block;"></i>
+        <span>Rendering graph…</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:40px;">
+    <button onclick="goBack()" class="convert-btn">
+      <i class="fas fa-arrow-left"></i> Back to Tool
+    </button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  Developed by Ashutosh Kumar (2024UCM2304) · NSUT
+</footer>
+
+<style>
+.graph-loading {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 420px;
+  color: #475569; font-size: 14px;
+  font-family: 'Outfit', sans-serif;
+}
+</style>
 
 <script>
-window.onload = function() {
-    let viz = new Viz();
+window.onload = function () {
+  let nfaDOT = localStorage.getItem("nfaGraphDOT");
+  let dfaDOT = localStorage.getItem("dfaGraphDOT");
 
-    let nfaDOT = localStorage.getItem("nfaGraphDOT");
-    let dfaDOT = localStorage.getItem("dfaGraphDOT");
+  function showError(id, msg) {
+    document.getElementById(id).innerHTML =
+      `<div class="graph-loading"><i class="fas fa-exclamation-triangle" style="color:#f59e0b; font-size:28px; margin-bottom:12px; display:block;"></i><span>${msg}</span></div>`;
+  }
 
-    if(!nfaDOT || !dfaDOT){
-        alert("Pehle Convert karo phir yaha aao!");
-        return;
-    }
+  if (!nfaDOT || !dfaDOT) {
+    showError("nfaGraph", "No NFA data found — please convert an NFA first.");
+    showError("dfaGraph", "No DFA data found — please convert an NFA first.");
+    return;
+  }
 
-    viz.renderSVGElement(nfaDOT).then(svg => {
-        document.getElementById("nfaGraph").appendChild(svg);
-    });
+  let viz1 = new Viz();
+  viz1.renderSVGElement(nfaDOT).then(svg => {
+    document.getElementById("nfaGraph").innerHTML = "";
+    document.getElementById("nfaGraph").appendChild(svg);
+  }).catch(() => showError("nfaGraph", "Error rendering NFA graph."));
 
-    viz.renderSVGElement(dfaDOT).then(svg => {
-        document.getElementById("dfaGraph").appendChild(svg);
-    });
+  let viz2 = new Viz();
+  viz2.renderSVGElement(dfaDOT).then(svg => {
+    document.getElementById("dfaGraph").innerHTML = "";
+    document.getElementById("dfaGraph").appendChild(svg);
+  }).catch(() => showError("dfaGraph", "Error rendering DFA graph."));
 };
 
-function goBack(){
-    window.location.href = "index.html";
-}
+function goBack() { window.location.href = "index.html"; }
 </script>
-
 </body>
 </html>
