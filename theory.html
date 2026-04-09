@@ -1,71 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Theory - NFA & DFA</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theory – NFA & DFA</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
 <body>
 
-<h1>Theory of NFA & DFA</h1>
-<p style="text-align:center; font-size:26px;">
-This page explains the theory of Regular Languages, DFA, NFA and Subset Construction Method used in NFA to DFA conversion.
-</p>
-<img src="Screenshot 2026-04-03 123517.png">
+<nav class="site-nav">
+  <span class="nav-logo">⚙ NFA→DFA</span>
+  <a href="index.html">Tool</a>
+  <a href="graphs.html">Graphs</a>
+  <a href="index.html" class="nav-cta">← Back</a>
+</nav>
 
+<section class="hero" style="min-height:36vh; padding-top:110px; padding-bottom:20px;">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="orb orb-1" style="opacity:0.4;"></div>
+  <div class="orb orb-2" style="opacity:0.4;"></div>
+  <div class="hero-badge">Automata Theory · Foundations</div>
+  <h1 style="font-size:clamp(1.8rem,4vw,3rem);">Theory of NFA &amp; DFA</h1>
+  <p class="hero-sub" style="margin-bottom:0;">
+    Regular Languages, Finite Automata, and the Subset Construction method — explained clearly.
+  </p>
+</section>
 
-<div class="description">
+<div class="theory-content">
 
+  <img src="images/Screenshot 2026-04-03 123517.png" class="theory-img" alt="Overview">
 
-<h2>Regular Language</h2>
-<p>
-A regular language is a language that can be expressed with a regular expression or a deterministic or non-deterministic finite automata or state machine.
-A language is a set of strings which are made up of characters from a specified alphabet, or set of symbols. Regular languages are a subset of the set of all strings.
-Regular languages are used in parsing and designing programming languages and are one of the first concepts taught in computability courses. 
-</p>
+  <!-- ── Regular Language ── -->
+  <h2>Regular Language</h2>
+  <p>
+    A <strong style="color:#a5b4fc;">regular language</strong> is any language that can be described by a regular expression,
+    or recognized by a finite automaton — deterministic or non-deterministic.
+    Languages are sets of strings over some alphabet, and regular languages form the simplest
+    class in the Chomsky hierarchy. They are foundational in compiler design, lexical analysis,
+    and computability theory.
+  </p>
 
-<h2>NFA(Non-deterministic finite automata)</h2>
+  <!-- ── NFA ── -->
+  <h2>NFA — Non-Deterministic Finite Automaton</h2>
+  <p>
+    An NFA can transition from one state to <strong style="color:#6ee7b7;">zero, one, or many</strong> states
+    on a single input symbol. A string is accepted if <em>any</em> path through the NFA ends in an
+    accepting state. This makes NFAs compact and elegant to design, though non-trivial to simulate directly.
+  </p>
+  <img src="images/Screenshot 2026-04-03 103026.png" class="theory-img" alt="NFA definition">
+  <img src="images/Screenshot 2026-04-03 103119.png" class="theory-img" alt="NFA example">
 
-<p>
-NFA (Non-Deterministic Finite Automaton) is a type of finite automaton in which, 
-for a given state and input symbol, the machine can move to zero, one, or multiple next states.
-</p>
-<img src="Screenshot 2026-04-03 103026.png" class="theory-img">
-<img src="Screenshot 2026-04-03 103119.png" class="theory-img">
+  <!-- ── DFA ── -->
+  <h2>DFA — Deterministic Finite Automaton</h2>
+  <p>
+    A DFA has <strong style="color:#6ee7b7;">exactly one</strong> transition per state per symbol.
+    Starting from the initial state, it reads the input left-to-right and follows transitions deterministically.
+    After consuming the full string, if the current state is an accepting state, the string is accepted.
+    Every NFA has an equivalent DFA — they recognize the same class of languages.
+  </p>
+  <img src="images/Screenshot 2026-04-03 123440.png" class="theory-img" alt="DFA definition">
+  <img src="images/Screenshot 2026-04-03 123509.png" class="theory-img" alt="DFA example">
 
-<h2>DFA(Deterministic finite automata)</h2>
+  <!-- ── Comparison ── -->
+  <img src="images/Difference-between-DFA-and-NFA.webp" class="theory-img" alt="DFA vs NFA comparison">
 
-<p>
-A Deterministic Finite Automaton is a machine that reads input symbols one by one and moves from one state to another,
-and if after reading the whole string it reaches an accepting state, the string is accepted, otherwise rejected.
-</p>
-<img src="Screenshot 2026-04-03 123440.png" class="theory-img">
-<img src="Screenshot 2026-04-03 123509.png" class="theory-img">
+  <!-- ── Subset Construction ── -->
+  <h2>Subset Construction Method</h2>
+  <p>
+    The subset construction algorithm converts an NFA into an equivalent DFA by treating
+    <strong style="color:#a5b4fc;">sets of NFA states</strong> as individual DFA states.
+  </p>
+  <p>
+    Starting from the start state, for each possible input symbol we compute the union of all
+    reachable NFA states and create a new DFA state for that set. The process repeats until no
+    new state sets are produced. A DFA state is accepting if it contains at least one NFA accepting state.
+    In the worst case this yields 2<sup>n</sup> DFA states from <em>n</em> NFA states.
+  </p>
+  <img src="images/Screenshot 2026-04-03 124532.png" class="theory-img" alt="Subset construction example">
 
-
-<img src="Difference-between-DFA-and-NFA.webp" class="theory-img">
-
-<h2>Subset Construction Method</h2>
-<p>
-Subset construction method is used to convert an NFA into a DFA. In this method,
-a group of NFA states is treated as a single state in DFA. Since NFA can move to
-multiple states on one input, we combine those states and make one DFA state.
-By creating all possible combinations of NFA states, we construct the DFA.
-</p>
-<img src="Screenshot 2026-04-03 124532.png" class="theory-img">
-
-
+  <div style="text-align:center; margin-top:56px;">
+    <button onclick="goBack()" class="convert-btn">
+      <i class="fas fa-arrow-left"></i> Back to Tool
+    </button>
+  </div>
 </div>
 
-<div style="text-align:center; margin-top:40px;">
-    <button onclick="goBack()" class="convert-btn">⬅ Back to tool</button>
-</div>
+<footer class="site-footer">
+  Developed by Ashutosh Kumar (2024UCM2304) · NSUT
+</footer>
 
 <script>
-function goBack(){
-    window.location.href = "index.html";
-}
+function goBack() { window.location.href = "index.html"; }
 </script>
-
 </body>
 </html>
