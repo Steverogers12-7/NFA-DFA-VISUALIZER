@@ -8,15 +8,12 @@ function convert() {
         let alphabetSet = new Set();
         let nfa = {};
 
-        // AUTO DETECT STATES + ALPHABET
         lines.forEach(l => {
             if (l.includes("=")) {
                 let [left, right] = l.split("=");
                 let [state, symbol] = left.split(",").map(x => x.trim());
-
                 statesSet.add(state);
                 alphabetSet.add(symbol);
-
                 right.split(",").forEach(s => statesSet.add(s.trim()));
             }
         });
@@ -24,84 +21,93 @@ function convert() {
         let states = [...statesSet];
         let alphabet = [...alphabetSet];
 
-        // INIT NFA
         states.forEach(s => {
             nfa[s] = {};
             alphabet.forEach(a => nfa[s][a] = []);
         });
 
-        // FILL TRANSITIONS
         lines.forEach(l => {
             if (l.includes("=")) {
                 let [left, right] = l.split("=");
                 let [state, symbol] = left.split(",").map(x => x.trim());
-
                 nfa[state][symbol] = right.split(",").map(x => x.trim());
             }
         });
 
-        // SUBSET CONSTRUCTION
-        let queue = [[start]];
-        let visited = [[start]];
-        let dfa = {};
-        let steps = "";
+        // ── SUBSET CONSTRUCTION ──
+       // ── SUBSET CONSTRUCTION ──
+let queue   = [[start]];
+let visited = [[start]];
+let dfa     = {};
+let steps   = "";
+let stepNum = 1;
 
-        while (queue.length > 0) {
-            let current = queue.shift();
-            let name = current.join("");
+while (queue.length > 0) {
+    let current = queue.shift();
+    let name    = current.join("");
+    
+    steps += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    steps += `STEP ${stepNum}: Processing State { ${current.join(", ")} }\n`;
+    steps += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
 
-            steps += `Processing {${current.join(", ")}}\n`;
+    dfa[name] = {};
 
-            dfa[name] = {};
+    alphabet.forEach(symbol => {
+        let newSet = new Set();
 
-            alphabet.forEach(symbol => {
-                let newSet = new Set();
+        current.forEach(s => {
+            if (nfa[s] && nfa[s][symbol]) {
+                nfa[s][symbol].forEach(t => newSet.add(t));
+            }
+        });
 
-                current.forEach(s => {
-                    if (nfa[s] && nfa[s][symbol]) {
-                        nfa[s][symbol].forEach(t => newSet.add(t));
-                    }
-                });
+        let newState = [...newSet].sort();
 
-                let newState = [...newSet].sort();
+        if (newState.length === 0) {
+            dfa[name][symbol] = "∅";
+            steps += `\n→ On input '${symbol}': No transition → ∅\n`;
+        } else {
+            let next = newState.join("");
+            dfa[name][symbol] = next;
 
-                if (newState.length === 0) {
-                    dfa[name][symbol] = "∅";
-                    steps += `  → '${symbol}' → ∅\n`;
-                } else {
-                    let next = newState.join("");
-                    dfa[name][symbol] = next;
+            steps += `\n→ On input '${symbol}': { ${current.join(", ")} } → { ${newState.join(", ")} }\n`;
 
-                    steps += `  → '${symbol}' → {${newState.join(", ")}}\n`;
-
-                    let exists = visited.some(v => v.join("") === next);
-                    if (!exists) {
-                        visited.push(newState);
-                        queue.push(newState);
-                    }
-                }
-            });
-
-            steps += "----------------------\n";
+            let exists = visited.some(v => v.join("") === next);
+            if (!exists) {
+                visited.push(newState);
+                queue.push(newState);
+                steps += `   ✔ New DFA state discovered → { ${newState.join(", ")} }\n`;
+            } else {
+                steps += `   ↺ Already visited\n`;
+            }
         }
+    });
 
-        document.getElementById("steps").innerText = steps;
+    stepNum++;
+}
 
-        // DFA TABLE
+document.getElementById("steps").textContent = steps;
+
+        // ── DFA TABLE ──
         let tableHTML = `<table class="modern-table">
-            <thead>
-                <tr>
-                    <th>DFA State</th>`;
-
+            <thead><tr><th>DFA State</th>`;
         alphabet.forEach(a => tableHTML += `<th>${a}</th>`);
-
         tableHTML += `</tr></thead><tbody>`;
 
         for (let state in dfa) {
-            tableHTML += `<tr><td>{${state}}</td>`;
+            let isFinal = finalStates.some(f => state.includes(f));
+            let stateDisplay = isFinal
+                ? `<td class="final-state">{ ${state} } ✦</td>`
+                : `<td>{ ${state} }</td>`;
+            tableHTML += `<tr>${stateDisplay}`;
             alphabet.forEach(a => {
                 let next = dfa[state][a];
-                tableHTML += `<td>${next === "∅" ? "∅" : "{" + next + "}"}</td>`;
+                if (next === "∅") {
+                    tableHTML += `<td class="empty-state">∅</td>`;
+                } else {
+                    let nextFinal = finalStates.some(f => next.includes(f));
+                    tableHTML += `<td ${nextFinal ? 'class="final-state"' : ''}>{  ${next}  }</td>`;
+                }
             });
             tableHTML += `</tr>`;
         }
@@ -109,96 +115,88 @@ function convert() {
         tableHTML += `</tbody></table>`;
         document.getElementById("dfaTable").innerHTML = tableHTML;
 
-        // SAVE GRAPHS
         saveNFA(nfa, start, finalStates);
         saveDFA(dfa, start, finalStates);
 
-        //alert("Conversion Done! Now click View Graphs");
-
     } catch (e) {
         console.error(e);
-        alert("Input format galat hai!");
+        alert("Input format is incorrect. Please check the format and try again.");
     }
 }
 
-// SAVE NFA GRAPH
+// ── SAVE NFA DOT ──
 function saveNFA(nfa, start, finalStates) {
-    let dot = "digraph NFA {\nrankdir=LR;\n";
-
-    dot += `start [shape=point];\n`;
-    dot += `start -> ${start};\n`;
-
+    let dot = `digraph NFA {
+rankdir=LR;
+bgcolor="transparent";
+node [fontname="Fira Code, monospace" fontsize=13 fontcolor="#e2e8f0"
+      style=filled fillcolor="#1e293b" color="#6366f1" penwidth=2];
+edge [fontname="Fira Code, monospace" fontsize=12 color="#818cf8" fontcolor="#a5b4fc" arrowsize=0.9];
+start [shape=point color="#6366f1" fillcolor="#6366f1" width=0.2];
+start -> ${start} [color="#6366f1"];
+`;
     finalStates.forEach(f => {
-        dot += `${f} [shape=doublecircle];\n`;
+        dot += `${f} [shape=doublecircle color="#10b981" fillcolor="#0f2a1e" fontcolor="#6ee7b7"];\n`;
     });
-
     for (let s in nfa) {
         for (let a in nfa[s]) {
             nfa[s][a].forEach(t => {
-                dot += `${s} -> ${t} [label="${a}"];\n`;
+                dot += `${s} -> ${t} [label=" ${a} "];\n`;
             });
         }
     }
-
     dot += "}";
-
     localStorage.setItem("nfaGraphDOT", dot);
 }
 
-// SAVE DFA GRAPH
+// ── SAVE DFA DOT ──
 function saveDFA(dfa, start, finalStates) {
-    let dot = "digraph DFA {\nrankdir=LR;\n";
-
-    dot += `start [shape=point];\n`;
-    dot += `start -> ${start};\n`;
-
+    let dot = `digraph DFA {
+rankdir=LR;
+bgcolor="transparent";
+node [fontname="Fira Code, monospace" fontsize=13 fontcolor="#e2e8f0"
+      style=filled fillcolor="#1e293b" color="#6366f1" penwidth=2];
+edge [fontname="Fira Code, monospace" fontsize=12 color="#818cf8" fontcolor="#a5b4fc" arrowsize=0.9];
+start [shape=point color="#6366f1" fillcolor="#6366f1" width=0.2];
+start -> "${start}" [color="#6366f1"];
+`;
     Object.keys(dfa).forEach(s => {
         let isFinal = finalStates.some(f => s.includes(f));
         if (isFinal) {
-            dot += `"${s}" [shape=doublecircle];\n`;
+            dot += `"${s}" [shape=doublecircle color="#10b981" fillcolor="#0f2a1e" fontcolor="#6ee7b7"];\n`;
         }
     });
-
     for (let s in dfa) {
         for (let a in dfa[s]) {
             let t = dfa[s][a];
             if (t !== "∅") {
-                dot += `"${s}" -> "${t}" [label="${a}"];\n`;
+                dot += `"${s}" -> "${t}" [label=" ${a} "];\n`;
             }
         }
     }
-
     dot += "}";
-
     localStorage.setItem("dfaGraphDOT", dot);
 }
 
-// ✅ STATIC EXAMPLE GRAPH (ONLY FOR INDEX PAGE)
+// ── EXAMPLE GRAPH ──
 function loadExampleGraph() {
-    let dot = `
-    digraph NFA {
-        rankdir=LR;
-
-        start [shape=point];
-        start -> q0;
-
-        q2 [shape=doublecircle];
-
-        q0 -> q0 [label="0"];
-        q0 -> q1 [label="0"];
-        q0 -> q0 [label="1"];
-        q1 -> q2 [label="0"];
-        q2 -> q2 [label="1"];
-    }
-    `;
-
+    let dot = `digraph NFA {
+rankdir=LR;
+bgcolor="transparent";
+node [fontname="Fira Code, monospace" fontsize=12 fontcolor="#e2e8f0"
+      style=filled fillcolor="#1e293b" color="#6366f1" penwidth=2];
+edge [fontname="Fira Code, monospace" fontsize=11 color="#818cf8" fontcolor="#a5b4fc" arrowsize=0.8];
+start [shape=point color="#6366f1" fillcolor="#6366f1" width=0.15];
+start -> q0;
+q2 [shape=doublecircle color="#10b981" fillcolor="#0f2a1e" fontcolor="#6ee7b7"];
+q0 -> q0 [label=" 0,1 "];
+q0 -> q1 [label=" 0 "];
+q1 -> q2 [label=" 0 "];
+q2 -> q2 [label=" 1 "];
+}`;
     let viz = new Viz();
-
     viz.renderSVGElement(dot).then(svg => {
-        let container = document.getElementById("exampleGraph");
-        if(container){
-            container.innerHTML = "";
-            container.appendChild(svg);
-        }
-    });
+        let c = document.getElementById("exampleGraph");
+        if (c) { c.innerHTML = ""; c.appendChild(svg); }
+    }).catch(console.error);
 }
