@@ -2,7 +2,7 @@
 
 > **Course Project**
 > **Course**-Theory of Automata & Formal Languages(TAFL), 4th Semester
-> **Developer:** Ashutosh Kumar | Roll No: 2024UCM2304  
+> **Developer:** Ashutosh Kumar | Roll No: 2024UCM2304
 > **Institution:** Netaji Subhas University of Technology (NSUT), Delhi
 
 ---
@@ -64,26 +64,12 @@ This is a web application that converts a **Non-Deterministic Finite Automaton (
 - Side-by-side **DFA vs NFA comparison** with reference images
 - Full explanation of the **Subset Construction Method** with worked example images
 - All theory is sourced from standard automata theory curriculum
-
-### UI & User Experience
-- **Floating glassmorphism navbar** — fixed at top with links to all pages
-- **Hero landing section** with animated gradient title, floating orbs, and background grid
-- **Feature cards** section previewing the three main outputs before the form
-- **Scroll reveal animations** — sections animate into view as you scroll
-- **Loading state on convert button** — spinner icon while processing
-- **Auto-scroll to results** after conversion completes
-- **Toast notification** — bottom-right popup confirming conversion success
-- **Sample NFA pre-loaded** — tool is ready to run with one click on page load
-- **Example graph** rendered in the instructions section using the sample NFA
-- Fully responsive layout for desktop and mobile screens
-
 ---
 
 ## How to Use
 
 ### 1. Open `index.html` in any modern browser
-
-No server needed. Just open the file directly.
+Web Application is live at -https://2024ucm2304-nfa-2-dfa-phi.vercel.app/
 
 ### 2. Enter your NFA
 
@@ -196,7 +182,6 @@ project/
 | [Google Fonts — Outfit + Fira Code](https://fonts.google.com/) | Typography |
 | `localStorage` | Persisting graph data between pages |
 
-No frameworks, no build tools, no backend. Pure HTML/CSS/JS.
 
 ---
 
@@ -222,12 +207,6 @@ After conversion, the tool generates **Graphviz DOT language** strings for both 
 
 ---
 
-## Known Limitations
-
-- ε-NFA (NFA with epsilon transitions) is **not supported** — only symbol-based transitions
-- Very large NFAs (10+ states) may produce many DFA states and slow rendering
-- Graph layout is handled by Graphviz's default engine; complex graphs may overlap
-- `localStorage` must be enabled in the browser (disabled in some private/incognito modes)
 
 ---
 
@@ -241,7 +220,7 @@ After conversion, the tool generates **Graphviz DOT language** strings for both 
 
 ---
 
-## Developer
+## Author
 
 **Ashutosh Kumar**  
 Roll No: 2024UCM2304  
@@ -251,4 +230,3 @@ Netaji Subhas University of Technology (NSUT), New Delhi
 
 ---
 
-*Built with vanilla HTML, CSS, and JavaScript. No frameworks. No dependencies beyond Viz.js and Font Awesome.*
