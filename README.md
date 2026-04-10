@@ -1,6 +1,7 @@
 # NFA → DFA Converter & Visualizer
 
-> **Course Project** — Mathematics and Computing, 4th Semester  
+> **Course Project**
+> **Course**-Theory of Automata & Formal Languages(TAFL), 4th Semester
 > **Developer:** Ashutosh Kumar | Roll No: 2024UCM2304  
 > **Institution:** Netaji Subhas University of Technology (NSUT), Delhi
 
@@ -8,9 +9,7 @@
 
 ## Project Overview
 
-This is a fully browser-based web application that converts a **Non-Deterministic Finite Automaton (NFA)** into an equivalent **Deterministic Finite Automaton (DFA)** using the **Subset Construction Algorithm**. The tool is designed to help students of Automata Theory visually understand how NFA-to-DFA conversion works — with step-by-step output, a transition table, and interactive graph rendering.
-
-No installation or server is required. All processing happens client-side in the browser.
+This is a web application that converts a **Non-Deterministic Finite Automaton (NFA)** into an equivalent **Deterministic Finite Automaton (DFA)** using the **Subset Construction Algorithm**. The tool is designed to help students of Automata Theory visually understand how NFA-to-DFA conversion works — with step-by-step output, a transition table, and interactive graph rendering.
 
 ---
 
@@ -49,7 +48,7 @@ No installation or server is required. All processing happens client-side in the
 ### Graph Visualization (graphs.html)
 - **NFA Graph** rendered as a directed graph with labeled edges
 - **DFA Graph** rendered as the equivalent deterministic automaton
-- Powered by **Viz.js (Graphviz)** — industry-standard graph layout engine
+- Powered by **Viz.js (Graphviz)** — It helps user to visualize better
 - Graphs are styled with:
   - Purple/indigo colored nodes and edges
   - Green double-circle nodes for accepting/final states
@@ -59,7 +58,7 @@ No installation or server is required. All processing happens client-side in the
 - Graceful error handling if no conversion has been run yet
 
 ### Theory Page (theory.html)
-- Covers **Regular Languages** — definition, properties, and use in compiler design
+- Covers **Regular Languages** — definition, properties
 - Explains **NFA (Non-Deterministic Finite Automaton)** — formal definition and behavior
 - Explains **DFA (Deterministic Finite Automaton)** — formal definition and acceptance condition
 - Side-by-side **DFA vs NFA comparison** with reference images
