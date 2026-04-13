@@ -7,7 +7,6 @@
 - Developer: Ashutosh Kumar
 - Roll No: 2024UCM2304
 - Institution: Netaji Subhas University of Technology (NSUT), Delhi
-
 ---
 
 ## Project Overview
