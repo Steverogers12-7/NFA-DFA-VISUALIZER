@@ -2,11 +2,11 @@
 
 ## Course Project
 
-Course: Theory of Automata & Formal Languages (TAFL)  
-Semester: 4th Semester  
-Developer: Ashutosh Kumar  
-Roll No: 2024UCM2304  
-Institution: Netaji Subhas University of Technology (NSUT), Delhi  
+- Course: Theory of Automata & Formal Languages (TAFL)
+- Semester: 4th Semester
+- Developer: Ashutosh Kumar
+- Roll No: 2024UCM2304
+- Institution: Netaji Subhas University of Technology (NSUT), Delhi
 ---
 
 ## Project Overview
