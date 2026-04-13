@@ -1,10 +1,12 @@
 # NFA → DFA Converter & Visualizer
 
-> **Course Project**
-> **Course**-Theory of Automata & Formal Languages(TAFL), 4th Semester
-> **Developer:** Ashutosh Kumar | Roll No: 2024UCM2304
-> **Institution:** Netaji Subhas University of Technology (NSUT), Delhi
+## Course Project
 
+**Course:** Theory of Automata & Formal Languages (TAFL)  
+**Semester:** 4th Semester  
+**Developer:** Ashutosh Kumar  
+**Roll No:** 2024UCM2304  
+**Institution:** Netaji Subhas University of Technology (NSUT), Delhi  
 ---
 
 ## Project Overview
