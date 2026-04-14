@@ -109,43 +109,9 @@ q2,1=q2</pre>
     <button class="mode-tab active" id="tab-nfa" onclick="switchMode('nfa')">
       <i class="fas fa-diagram-project"></i> NFA Transitions
     </button>
-    <button class="mode-tab" id="tab-regex" onclick="switchMode('regex')">
-      <i class="fas fa-code"></i> Regular Expression
-    </button>
   </div>
 
-  <!-- ── REGEX PANEL ── -->
-  <div class="inputBox" id="regex-panel" style="display:none;">
-    <div class="regex-info-banner">
-      <i class="fas fa-info-circle"></i>
-      <span>Type a regular expression — Thompson's Construction will convert it to an NFA, then run subset construction to produce the DFA.</span>
-    </div>
-    <div class="form-group">
-      <label class="heading dark">
-        <i class="fas fa-terminal"></i> Regular Expression
-      </label>
-      <input type="text" id="regexInput" placeholder="e.g.  (a|b)*abb  or  [01]*00  or  a+b?" value="(0|1)*00">
-      <p class="hint">
-        <i class="fas fa-info-circle"></i>
-        <span>Supports: literals · <code>|</code> union · <code>*</code> star · <code>+</code> one-or-more · <code>?</code> optional · <code>()</code> groups · <code>[abc]</code> char class</span>
-      </p>
-    </div>
-
-    <div class="regex-examples">
-      <span class="regex-ex-label">Try an example:</span>
-      <button class="regex-chip" onclick="setRegex('(0|1)*00')">(0|1)*00</button>
-      <button class="regex-chip" onclick="setRegex('(a|b)*abb')">(a|b)*abb</button>
-      <button class="regex-chip" onclick="setRegex('a*b+')"  >a*b+</button>
-      <button class="regex-chip" onclick="setRegex('[01]*1')">[01]*1</button>
-      <button class="regex-chip" onclick="setRegex('(ab)+')">(ab)+</button>
-    </div>
-
-    <div style="text-align:center; margin-top:32px;">
-      <button class="convert-btn" onclick="runConvertRegex()">
-        <i class="fas fa-magic"></i> Parse RE &amp; Convert
-      </button>
-    </div>
-  </div>
+  
 
   <!-- ── NFA PANEL ── -->
   <div class="inputBox" id="nfa-panel">
