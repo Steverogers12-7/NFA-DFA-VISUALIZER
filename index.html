@@ -80,7 +80,8 @@
   <div class="instruction-box" id="instructions">
     <h2>How to Use</h2>
     <p style="color:#94a3b8; font-size:14px; margin-bottom:20px;">
-      Enter your NFA below using the format shown. A sample NFA is pre-loaded so you can run it immediately.
+      Enter your NFA below using the format shown — or type a Regular Expression and let the tool build the NFA for you.
+      A sample NFA is pre-loaded so you can run it immediately.
     </p>
     <div class="example-container">
       <div id="exampleGraph"></div>
@@ -103,8 +104,51 @@ q2,1=q2</pre>
   <span class="section-label">Automaton Input</span>
   <div class="section-title" style="margin-bottom:24px;">Define Your NFA</div>
 
-  <div class="inputBox">
+  <!-- ── INPUT MODE TABS ── -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-nfa" onclick="switchMode('nfa')">
+      <i class="fas fa-diagram-project"></i> NFA Transitions
+    </button>
+    <button class="mode-tab" id="tab-regex" onclick="switchMode('regex')">
+      <i class="fas fa-code"></i> Regular Expression
+    </button>
+  </div>
 
+  <!-- ── REGEX PANEL ── -->
+  <div class="inputBox" id="regex-panel" style="display:none;">
+    <div class="regex-info-banner">
+      <i class="fas fa-info-circle"></i>
+      <span>Type a regular expression — Thompson's Construction will convert it to an NFA, then run subset construction to produce the DFA.</span>
+    </div>
+    <div class="form-group">
+      <label class="heading dark">
+        <i class="fas fa-terminal"></i> Regular Expression
+      </label>
+      <input type="text" id="regexInput" placeholder="e.g.  (a|b)*abb  or  [01]*00  or  a+b?" value="(0|1)*00">
+      <p class="hint">
+        <i class="fas fa-info-circle"></i>
+        <span>Supports: literals · <code>|</code> union · <code>*</code> star · <code>+</code> one-or-more · <code>?</code> optional · <code>()</code> groups · <code>[abc]</code> char class</span>
+      </p>
+    </div>
+
+    <div class="regex-examples">
+      <span class="regex-ex-label">Try an example:</span>
+      <button class="regex-chip" onclick="setRegex('(0|1)*00')">(0|1)*00</button>
+      <button class="regex-chip" onclick="setRegex('(a|b)*abb')">(a|b)*abb</button>
+      <button class="regex-chip" onclick="setRegex('a*b+')"  >a*b+</button>
+      <button class="regex-chip" onclick="setRegex('[01]*1')">[01]*1</button>
+      <button class="regex-chip" onclick="setRegex('(ab)+')">(ab)+</button>
+    </div>
+
+    <div style="text-align:center; margin-top:32px;">
+      <button class="convert-btn" onclick="runConvertRegex()">
+        <i class="fas fa-magic"></i> Parse RE &amp; Convert
+      </button>
+    </div>
+  </div>
+
+  <!-- ── NFA PANEL ── -->
+  <div class="inputBox" id="nfa-panel">
     <div class="form-group">
       <label class="heading dark">
         <i class="fas fa-play-circle"></i> Start State (q₀)
@@ -154,6 +198,9 @@ q2,1=q2</textarea>
   <span class="section-label">Output</span>
 
   <h2>Subset Construction Steps</h2>
+  <p style="color:#64748b; font-size:13px; margin-bottom:20px;">
+    Each step shows the DFA state being built. The mini diagram on the right visualises which NFA states are active (purple glow) and newly discovered (green pulse).
+  </p>
   <div id="steps" class="steps-output"></div>
 
   <h2>DFA Transition Table</h2>
@@ -166,7 +213,7 @@ q2,1=q2</textarea>
     </a>
   </div>
   <p style="color:#64748b; font-size:13px; margin-top:8px;">
-    Graphs are saved automatically — clicl the button to view both NFA &amp; DFA rendered side by side.open it in new tab to have parallel table and graphs.
+    Graphs are saved automatically — click the button to view both NFA &amp; DFA rendered side by side.
   </p>
 </div>
 
@@ -188,6 +235,35 @@ q2,1=q2</textarea>
 </footer>
 
 <script>
+/* ── MODE TABS ── */
+function switchMode(mode) {
+  document.getElementById('nfa-panel').style.display   = mode === 'nfa'   ? '' : 'none';
+  document.getElementById('regex-panel').style.display = mode === 'regex' ? '' : 'none';
+  document.getElementById('tab-nfa').classList.toggle('active',   mode === 'nfa');
+  document.getElementById('tab-regex').classList.toggle('active', mode === 'regex');
+}
+
+function setRegex(val) {
+  document.getElementById('regexInput').value = val;
+}
+
+function runConvertRegex() {
+  const btn = event.currentTarget;
+  btn.classList.add('loading');
+  btn.disabled = true;
+  setTimeout(() => {
+    convertFromRegex();
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    const results = document.getElementById('results');
+    if (document.getElementById('steps').children.length) {
+      results.style.display = 'block';
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showToast('✓ RE parsed & DFA built — graphs saved!');
+    }
+  }, 450);
+}
+
 function goToTheory(){ window.location.href = "theory.html"; }
 function goToGraphs(){ window.location.href = "graphs.html"; }
 
@@ -208,7 +284,7 @@ function runConvert() {
     btn.disabled = false;
     const results = document.getElementById('results');
     const steps = document.getElementById('steps');
-    if (steps.textContent.trim()) {
+    if (steps.children.length) {
       results.style.display = 'block';
       results.scrollIntoView({ behavior: 'smooth', block: 'start' });
       showToast('✓ Conversion complete — graphs saved!');
@@ -216,7 +292,6 @@ function runConvert() {
   }, 450);
 }
 
-// scroll reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -227,7 +302,24 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.feature-card, .card').forEach(el => observer.observe(el));
 
-window.onload = function(){ loadExampleGraph(); };
+window.onload = function(){
+  loadExampleGraph();
+  // ── Restore saved results if user navigated away and came back ──
+  var savedSteps = localStorage.getItem("savedStepsHTML");
+  var savedTable = localStorage.getItem("savedTableHTML");
+  if (savedSteps && savedTable) {
+    document.getElementById("steps").innerHTML   = savedSteps;
+    document.getElementById("dfaTable").innerHTML = savedTable;
+    document.getElementById("results").style.display = "block";
+    // Restore input fields
+    var s = localStorage.getItem("savedInputStart");
+    var f = localStorage.getItem("savedInputFinal");
+    var t = localStorage.getItem("savedInputTrans");
+    if (s) document.getElementById("start").value       = s;
+    if (f) document.getElementById("final").value       = f;
+    if (t) document.getElementById("transitions").value = t;
+  }
+};
 </script>
 <script src="script.js"></script>
 </body>
