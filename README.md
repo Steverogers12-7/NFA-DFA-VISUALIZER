@@ -1,28 +1,48 @@
 # ⚙ NFA → DFA Converter & Visualizer
 
-<div align="center">
+## Project Overview
 
-![Hero](screenshots/Screenshot_2026-04-14_101013.png)
+This is a fully browser-based web application that converts a **Non-Deterministic Finite Automaton (NFA)** into an equivalent **Deterministic Finite Automaton (DFA)** using the **Subset Construction Algorithm**. The tool is designed to help students of Automata Theory visually understand how NFA-to-DFA conversion works — with step-by-step output, a transition table, and interactive graph rendering.
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Vercel-6366f1?style=for-the-badge)](https://2024ucm2304-nfa-2-dfa-phi.vercel.app/)
-[![Made with](https://img.shields.io/badge/Made_with-Vanilla_JS-f7df1e?style=for-the-badge&logo=javascript)](https://github.com)
-[![Institution](https://img.shields.io/badge/NSUT-Delhi-10b981?style=for-the-badge)](https://nsut.ac.in)
-
-**A web application that converts any NFA into an equivalent DFA using the Subset Construction Algorithm — with step-by-step animation, transition tables, and interactive graph visualization.**
-
-</div>
+No installation or server is required. All processing happens client-side in the browser.
 
 ---
+## Live Pages
+
+| Page | File | Description |
+|------|------|-------------|
+| Main Tool | `index.html` | NFA input form + conversion output |
+| Graph View | `graphs.html` | Visual NFA and DFA graph rendering |
+| Theory | `theory.html` | Theoretical background and concepts |
+
+---
+
+## Live Pages
+
+| Page | File | Description |
+|------|------|-------------|
+| Main Tool | `index.html` | NFA input form + conversion output |
+| Graph View | `graphs.html` | Visual NFA and DFA graph rendering |
+| Theory | `theory.html` | Theoretical background and concepts |
+
+---
+
+
+
+<div align="center">
+
+![Hero](Screenshot_2026-04-14_101013.png)
+
 
 ## 📸 Screenshots
 
 | Input Panel | Subset Construction Steps |
 |:-----------:|:-------------------------:|
-| ![Input](screenshots/Screenshot_2026-04-14_101027.png) | ![Steps](screenshots/Screenshot_2026-04-14_101049.png) |
+| ![Input](Screenshot_2026-04-14_101027.png) | ![Steps](Screenshot_2026-04-14_101049.png) |
 
 | DFA Transition Table | Full Graph View |
 |:--------------------:|:---------------:|
-| ![Table](screenshots/Screenshot_2026-04-14_101058.png) | ![Graph](screenshots/Screenshot_2026-04-14_101114.png) |
+| ![Table](Screenshot_2026-04-14_101058.png) | ![Graph](Screenshot_2026-04-14_101114.png) |
 
 ---
 
