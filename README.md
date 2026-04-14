@@ -136,11 +136,11 @@ Click **"View Full Graphs"** to open `graphs.html` and see the rendered NFA and 
 
 | Input Panel | Subset Construction Steps |
 |:-----------:|:-------------------------:|
-| ![Input](Screenshot_2026-04-14_101027.png) | ![Steps](Screenshot_2026-04-14_101049.png) |
+| ![Input](Screenshot 2026-04-14 101027.png) | ![Steps](Screenshot 2026-04-14 101049.png) |
 
 | DFA Transition Table | Full Graph View |
 |:--------------------:|:---------------:|
-| ![Table](Screenshot_2026-04-14_101058.png) | ![Graph](Screenshot_2026-04-14_101114.png) |
+| ![Table](Screenshot 2026-04-14 101058.png) | ![Graph](Screenshot 2026-04-14 101114.png) |
 
 ---
 
